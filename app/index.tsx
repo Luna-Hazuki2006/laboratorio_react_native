@@ -1,15 +1,26 @@
-import { Text, View } from "react-native";
+import React from 'react';
+import { SafeAreaView, StyleSheet } from 'react-native';
 
-export default function Index() {
+import App from './App';
+import colors from './styles/colors';
+
+import { RealmProvider } from '@realm/react';
+import schemas from './models';
+
+export default function AppWrapper()  {
+
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text>Edit app/index.tsx to edit this screen.</Text>
-    </View>
+    <SafeAreaView style={styles.screen}>
+      <RealmProvider schema={schemas}>
+        <App />
+      </RealmProvider>
+    </SafeAreaView>
   );
-}
+};
+
+const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    backgroundColor: colors.darkBlue,
+  },
+});
