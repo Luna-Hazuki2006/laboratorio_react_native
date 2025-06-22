@@ -1,16 +1,16 @@
 import React, { useCallback } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { BSON } from 'realm';
 
 import Task from '../models/Task';
-import { AddTaskForm } from './AddTaskForm';
+import AddTaskForm from './AddTaskForm';
 import TaskList from './TaskList';
 
 import { useRealm } from '@realm/react';
-import { shadows } from '../styles/shadows';
+import shadows from '../styles/shadows';
 
 export default function TaskManager({
   tasks,
-  userId,
   setShowDone,
   showDone,
 }: {
@@ -23,25 +23,22 @@ export default function TaskManager({
 
   const handleAddTask = useCallback(
     (description: string): void => {
-      if (!description) {
-        return;
-      }
+      if (!description) return;
 
-      // Everything in the function passed to "realm.write" is a transaction and will
-      // hence succeed or fail together. A transcation is the smallest unit of transfer
-      // in Realm so we want to be mindful of how much we put into one single transaction
-      // and split them up if appropriate (more commonly seen server side). Since clients
-      // may occasionally be online during short time spans we want to increase the probability
-      // of sync participants to successfully sync everything in the transaction, otherwise
-      // no changes propagate and the transaction needs to start over when connectivity allows.
       realm.write(() => {
         return realm.create(Task, {
+          _id: new BSON.ObjectId(),
+          taskListId: new BSON.ObjectId(),
+          name: 'Sin nombre',
           description,
-          userId: userId ?? 'SYNC_DISABLED',
+          isComplete: false,
+          expiresAt: new Date(),
+          createdAt: new Date(),
+          completedAt: new Date(),
         });
       });
     },
-    [realm, userId]
+    [realm]
   );
 
   const handleToggleTaskStatus = useCallback(

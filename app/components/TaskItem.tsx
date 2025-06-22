@@ -1,38 +1,38 @@
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import Realm from 'realm';
 
-import { Task } from '../models/Task';
+import Task from '../models/Task';
 import colors from '../styles/colors';
-import { shadows } from '../styles/shadows';
+import shadows from '../styles/shadows';
 
 type TaskItemProps = {
-  task: Task & Realm.Object;
+  task: Task;
   onToggleStatus: () => void;
   onDelete: () => void;
 };
 
-export const TaskItem = React.memo<TaskItemProps>(
-  ({task, onToggleStatus, onDelete}) => {
-    return (
-      <View style={styles.task}>
-        <Pressable
-          onPress={onToggleStatus}
-          style={[styles.status, task.isComplete && styles.completed]}>
-          <Text style={styles.icon}>{task.isComplete ? '✓' : '○'}</Text>
-        </Pressable>
-        <View style={styles.descriptionContainer}>
-          <Text numberOfLines={1} style={styles.description}>
-            {task.description}
-          </Text>
-        </View>
-        <Pressable onPress={onDelete} style={styles.deleteButton}>
-          <Text style={styles.deleteText}>Delete</Text>
-        </Pressable>
+const TaskItemComponent: React.FC<TaskItemProps> = ({ task, onToggleStatus, onDelete }) => {
+  return (
+    <View style={styles.task}>
+      <Pressable
+        onPress={onToggleStatus}
+        style={[styles.status, task.isComplete && styles.completed]}>
+        <Text style={styles.icon}>{task.isComplete ? '✓' : '○'}</Text>
+      </Pressable>
+      <View style={styles.descriptionContainer}>
+        <Text numberOfLines={1} style={styles.description}>
+          {task.description}
+        </Text>
       </View>
-    );
-  },
-);
+      <Pressable onPress={onDelete} style={styles.deleteButton}>
+        <Text style={styles.deleteText}>Delete</Text>
+      </Pressable>
+    </View>
+  );
+};
+
+
+export default React.memo(TaskItemComponent);
 
 const styles = StyleSheet.create({
   task: {
@@ -79,3 +79,4 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+

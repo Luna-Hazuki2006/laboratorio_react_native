@@ -14,7 +14,7 @@ class TaskList extends Realm.Object<TaskList> {
       name: 'string',
       tasks: {
         type: 'list',
-        objectType: 'Task', // muy importante
+        objectType: 'Task',
       },
       createdAt: { type: 'date', default: new Date() },
     },

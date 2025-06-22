@@ -2,8 +2,8 @@ import { Realm } from '@realm/react';
 import React from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 
-import { Task } from '../models/Task';
-import { TaskItem } from './TaskItem';
+import Task from '../models/Task';
+import TaskItem from './TaskItem';
 
 type TaskListProps = {
   tasks: Realm.Results<Task & Realm.Object>;
@@ -11,7 +11,7 @@ type TaskListProps = {
   onDeleteTask: (task: Task & Realm.Object) => void;
 };
 
-export const TaskList: React.FC<TaskListProps> = ({ tasks, onToggleTaskStatus, onDeleteTask }) => {
+const TaskList: React.FC<TaskListProps> = ({ tasks, onToggleTaskStatus, onDeleteTask }) => {
   return (
     <View style={styles.listContainer}>
       <FlatList

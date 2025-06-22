@@ -1,7 +1,7 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, TextStyle, ViewStyle } from 'react-native';
 import colors from './colors';
 
-export const buttonStyles: StyleSheet.NamedStyles<any> = {
+const buttonStyles = StyleSheet.create({
   button: {
     paddingVertical: 10,
     paddingHorizontal: 20,
@@ -10,11 +10,14 @@ export const buttonStyles: StyleSheet.NamedStyles<any> = {
     marginHorizontal: 10,
     borderRadius: 5,
     backgroundColor: colors.purple,
-  },
+  } as ViewStyle,
   text: {
     color: colors.white,
     textAlign: 'center',
     fontSize: 17,
     fontWeight: 'bold',
-  },
-};
+  } as TextStyle,
+});
+
+export default buttonStyles;
+

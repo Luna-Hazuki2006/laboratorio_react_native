@@ -1,4 +1,4 @@
-import Realm, { BSON } from 'realm';
+import { BSON, ObjectSchema, Realm } from 'realm';
 
 class Task extends Realm.Object<Task> {
   _id!: BSON.ObjectId;
@@ -10,7 +10,7 @@ class Task extends Realm.Object<Task> {
   createdAt!: Date;
   completedAt!: Date;
 
-  static schema: Realm.ObjectSchema = {
+  static schema: ObjectSchema = {
     name: 'Task',
     primaryKey: '_id',
     properties: {
