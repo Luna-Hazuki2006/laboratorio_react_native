@@ -1,6 +1,6 @@
 import React from 'react';
-import TaskManager from './components/TaskManager';
 import Task from './models/Task';
+import TaskManager from './views/TaskManager';
 
 import { useQuery } from '@realm/react';
 

@@ -2,9 +2,9 @@ import React, { useCallback } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { BSON } from 'realm';
 
+import AddTaskForm from '../components/AddTaskForm';
+import TaskList from '../components/TaskList';
 import Task from '../models/Task';
-import AddTaskForm from './AddTaskForm';
-import TaskList from './TaskList';
 
 import { useRealm } from '@realm/react';
 import shadows from '../styles/shadows';
