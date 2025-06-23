@@ -1,28 +1,27 @@
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-import Task from '../models/Task';
-import colors from '../styles/colors';
-import shadows from '../styles/shadows';
+import TaskList from '../../models/TaskList';
+import colors from '../../styles/colors';
+import shadows from '../../styles/shadows';
 
-type TaskItemProps = {
-  task: Task;
-  onToggleStatus: () => void;
+type TaskListItemProps = {
+  taskList: TaskList;
+  onPress: () => void;
   onDelete: () => void;
 };
 
-const TaskItemComponent: React.FC<TaskItemProps> = ({ task, onToggleStatus, onDelete }) => {
+const TaskListItemComponent: React.FC<TaskListItemProps> = ({ taskList, onPress, onDelete }) => {
   return (
     <View style={styles.task}>
-      <Pressable
-        onPress={onToggleStatus}
-        style={[styles.status, task.isComplete && styles.completed]}>
-        <Text style={styles.icon}>{task.isComplete ? '✓' : '○'}</Text>
-      </Pressable>
       <View style={styles.descriptionContainer}>
+        <Pressable
+        onPress={onPress}
+        >
         <Text numberOfLines={1} style={styles.description}>
-          {task.description}
+          {taskList.name}
         </Text>
+        </Pressable>
       </View>
       <Pressable onPress={onDelete} style={styles.deleteButton}>
         <Text style={styles.deleteText}>Delete</Text>
@@ -32,7 +31,7 @@ const TaskItemComponent: React.FC<TaskItemProps> = ({ task, onToggleStatus, onDe
 };
 
 
-export default React.memo(TaskItemComponent);
+export default React.memo(TaskListItemComponent);
 
 const styles = StyleSheet.create({
   task: {

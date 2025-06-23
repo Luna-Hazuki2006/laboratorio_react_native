@@ -2,7 +2,7 @@ import { Realm } from '@realm/react';
 import React from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 
-import Task from '../models/Task';
+import Task from '../../models/Task';
 import TaskItem from './TaskItem';
 
 type TaskListProps = {
@@ -22,8 +22,6 @@ const TaskList: React.FC<TaskListProps> = ({ tasks, onToggleTaskStatus, onDelete
             task={item}
             onToggleStatus={() => onToggleTaskStatus(item)}
             onDelete={() => onDeleteTask(item)}
-            // Don't spread the Realm item as such: {...item}
-            
           />
         )}
       />

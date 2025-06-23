@@ -8,28 +8,28 @@ import {
   View,
 } from 'react-native';
 
-import buttonStyles from '../styles/button';
-import colors from '../styles/colors';
-import shadows from '../styles/shadows';
+import buttonStyles from '../../styles/button';
+import colors from '../../styles/colors';
+import shadows from '../../styles/shadows';
 
-type AddTaskFormProps = {
-  onSubmit: (description: string) => void;
+type AddTaskListFormProps = {
+  onSubmit: (name: string) => void;
 };
 
-const AddTaskForm: React.FC<AddTaskFormProps> = ({onSubmit}) => {
-  const [description, setDescription] = useState('');
+const AddTaskForm: React.FC<AddTaskListFormProps> = ({onSubmit}) => {
+  const [name, setName] = useState('');
 
   const handleSubmit = () => {
-    onSubmit(description);
-    setDescription('');
+    onSubmit(name);
+    setName('');
   };
 
   return (
     <View style={styles.form}>
       <TextInput
-        value={description}
-        placeholder="Enter new task description"
-        onChangeText={setDescription}
+        value={name}
+        placeholder="Enter new list name"
+        onChangeText={setName}
         autoCorrect={false}
         autoCapitalize="none"
         style={styles.textInput}

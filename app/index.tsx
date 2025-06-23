@@ -1,26 +1,10 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet } from 'react-native';
+import TaskLists from './taskLists/index';
 
-import App from './App';
-import colors from './styles/colors';
-
-import { RealmProvider } from '@realm/react';
-import schemas from './models';
-
-export default function AppWrapper()  {
-
+export default function App()  {
   return (
-    <SafeAreaView style={styles.screen}>
-      <RealmProvider schema={schemas}>
-        <App />
-      </RealmProvider>
-    </SafeAreaView>
+        <TaskLists />
   );
 };
 
-const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    backgroundColor: colors.darkBlue,
-  },
-});
+

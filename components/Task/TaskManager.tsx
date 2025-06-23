@@ -1,13 +1,14 @@
-import React, { useCallback } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useCallback, useMemo } from 'react';
+import { StyleSheet, Switch, Text, View } from 'react-native';
 import { BSON } from 'realm';
 
-import AddTaskForm from '../components/AddTaskForm';
-import TaskList from '../components/TaskList';
-import Task from '../models/Task';
+import AddTaskForm from '../../components/Task/AddTaskForm';
+import TaskList from '../../components/Task/TaskList';
+import Task from '../../models/Task';
 
 import { useRealm } from '@realm/react';
-import shadows from '../styles/shadows';
+import { useLocalSearchParams } from 'expo-router';
+import shadows from '../../styles/shadows';
 
 export default function TaskManager({
   tasks,
@@ -15,11 +16,13 @@ export default function TaskManager({
   showDone,
 }: {
   tasks: Realm.Results<Task & Realm.Object>;
-  userId?: string;
   setShowDone: (showDone: boolean) => void;
   showDone: boolean;
 }) {
   const realm = useRealm();
+  
+  const { id } = useLocalSearchParams();
+  const taskListId = useMemo(() => new BSON.ObjectId(id as string), [id]);
 
   const handleAddTask = useCallback(
     (description: string): void => {
@@ -28,7 +31,7 @@ export default function TaskManager({
       realm.write(() => {
         return realm.create(Task, {
           _id: new BSON.ObjectId(),
-          taskListId: new BSON.ObjectId(),
+          taskListId: taskListId,
           name: 'Sin nombre',
           description,
           isComplete: false,
@@ -38,29 +41,15 @@ export default function TaskManager({
         });
       });
     },
-    [realm]
+    [realm, taskListId]
   );
 
   const handleToggleTaskStatus = useCallback(
     (task: Task & Realm.Object): void => {
       realm.write(() => {
-        // Normally when updating a record in a NoSQL or SQL database, we have to type
-        // a statement that will later be interpreted and used as instructions for how
-        // to update the record. But in RealmDB, the objects are "live" because they are
-        // actually referencing the object's location in memory on the device (memory mapping).
-        // So rather than typing a statement, we modify the object directly by changing
-        // the property values. If the changes adhere to the schema, Realm will accept
-        // this new version of the object and wherever this object is being referenced
-        // locally will also see the changes "live".
         task.isComplete = !task.isComplete;
       });
 
-      // Alternatively if passing the ID as the argument to handleToggleTaskStatus:
-      // realm?.write(() => {
-      //   const task = realm?.objectForPrimaryKey('Task', id); // If the ID is passed as an ObjectId
-      //   const task = realm?.objectForPrimaryKey('Task', Realm.BSON.ObjectId(id));  // If the ID is passed as a string
-      //   task.isComplete = !task.isComplete;
-      // });
     },
     [realm]
   );
@@ -69,9 +58,6 @@ export default function TaskManager({
     (task: Task & Realm.Object): void => {
       realm.write(() => {
         realm.delete(task);
-
-        // Alternatively if passing the ID as the argument to handleDeleteTask:
-        // realm?.delete(realm?.objectForPrimaryKey('Task', id));
       });
     },
     [realm]
@@ -87,10 +73,10 @@ export default function TaskManager({
           <TaskList tasks={tasks} onToggleTaskStatus={handleToggleTaskStatus} onDeleteTask={handleDeleteTask} />
         )}
       </View>
-      {/* <View style={styles.switchPanel}>
+      <View style={styles.switchPanel}>
         <Text style={styles.switchPanelText}>Show Completed?</Text>
         <Switch value={showDone} onValueChange={() => setShowDone(!showDone)} />
-      </View> */}
+      </View> 
     </>
   );
 };
