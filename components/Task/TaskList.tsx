@@ -11,7 +11,10 @@ type TaskListProps = {
   onDeleteTask: (task: Task & Realm.Object) => void;
 };
 
-const TaskList: React.FC<TaskListProps> = ({ tasks, onToggleTaskStatus, onDeleteTask }) => {
+const TaskList: React.FC<TaskListProps> = (
+  { tasks, onToggleTaskStatus, onDeleteTask }) => {
+  console.log(tasks);
+  
   return (
     <View style={styles.listContainer}>
       <FlatList

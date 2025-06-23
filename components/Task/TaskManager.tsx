@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
-import { StyleSheet, Switch, Text, View } from 'react-native';
+import { StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
 import { BSON } from 'realm';
 
 import AddTaskForm from '../../components/Task/AddTaskForm';
@@ -7,7 +7,7 @@ import TaskList from '../../components/Task/TaskList';
 import Task from '../../models/Task';
 
 import { useRealm } from '@realm/react';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import shadows from '../../styles/shadows';
 
 export default function TaskManager({
@@ -21,7 +21,7 @@ export default function TaskManager({
 }) {
   const realm = useRealm();
   
-  const { id } = useLocalSearchParams();
+  const { id } = useLocalSearchParams<{ id: string }>();
   const taskListId = useMemo(() => new BSON.ObjectId(id as string), [id]);
 
   const handleAddTask = useCallback(
@@ -77,6 +77,12 @@ export default function TaskManager({
         <Text style={styles.switchPanelText}>Show Completed?</Text>
         <Switch value={showDone} onValueChange={() => setShowDone(!showDone)} />
       </View> 
+      <View>
+        <TouchableOpacity onPress={() => {router.push({
+            pathname: '/taskList/[id]/add',
+            params: { id },
+        });}}><Text>➕</Text></TouchableOpacity>
+      </View>
     </>
   );
 };
