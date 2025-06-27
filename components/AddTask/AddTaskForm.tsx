@@ -81,10 +81,10 @@ const AddTaskForm: React.FC<AddTaskFormProps> = ({
             {/* <Button onPress={showDatepicker} title="Show date picker!" />
             <Button onPress={showTimepicker} title="Show time picker!" /> */}
             <View className="flex flex-row justify-start space-x-4 mb-4">
-                <TouchableOpacity className="bg-red-400 px-3 py-2 rounded-lg" onPress={showDatepicker}>
+                <TouchableOpacity className="bg-red-400 px-3 py-2 rounded-lg mr-3" onPress={showDatepicker}>
                     <Text className="text-white text-xl">📅</Text>
                 </TouchableOpacity>
-                <TouchableOpacity className="bg-red-400 px-3 py-2 rounded-lg" onPress={showTimepicker}>
+                <TouchableOpacity className="bg-red-400 px-3 py-2 rounded-lg  ml-3 " onPress={showTimepicker}>
                     <Text className="text-white text-xl">⌚</Text>
                 </TouchableOpacity>
             </View>

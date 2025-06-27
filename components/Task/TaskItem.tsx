@@ -1,6 +1,6 @@
 import { Checkbox } from "expo-checkbox";
 import React from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import Task from '../../models/Task';
 import colors from '../../styles/colors';
@@ -26,14 +26,14 @@ const TaskItemComponent: React.FC<TaskItemProps> = ({ task, onToggleStatus, onEd
         <Text style={styles.icon}>{task.isComplete ? '✓' : '○'}</Text>
       </Pressable> */}
       <View style={styles.descriptionContainer}>
-        <Pressable onPress={() => onEdit(task as Task & Realm.Object)}>
+        <TouchableOpacity onPress={() => onEdit(task as Task & Realm.Object)}>
           <Text numberOfLines={1} style={styles.description}>
             {task.name}
           </Text>
-          <Text numberOfLines={1} style={styles.descriptionDate}>
+          <Text className="text-left mb-3 ml-2" numberOfLines={1} style={styles.descriptionDate}>
             Until: {task.expiresAt.toLocaleString()}
           </Text>
-        </Pressable>
+        </TouchableOpacity>
       </View>
       <Pressable onPress={onDelete} style={styles.deleteButton}>
         <Text style={styles.deleteText}>Delete</Text>

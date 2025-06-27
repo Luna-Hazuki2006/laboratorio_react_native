@@ -44,6 +44,7 @@
         {
           "icon": "./assets/sounds/campanitas.png",
           "color": "#cd5c5c",
+          "defaultChannel": "default",
           "sounds": ["./assets/sounds/notificacion.wav"]
         }
       ]

@@ -19,7 +19,7 @@ const TaskListItemComponent: React.FC<TaskListItemProps> = ({ taskList, onPress,
                     <Text numberOfLines={1} style={styles.description}>
                         {taskList.name}
                     </Text>
-                    <Text numberOfLines={1} style={styles.descriptionDate}>
+                    <Text className='mb-3' numberOfLines={1} style={styles.descriptionDate}>
                         {taskList.createdAt.toLocaleString()}
                     </Text>
                 </TouchableOpacity>

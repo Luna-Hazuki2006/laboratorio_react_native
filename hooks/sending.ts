@@ -14,6 +14,12 @@ export async function aceptar_notificaciones() {
             shouldSetBadge: false,
         }),
     });
+
+    await Notifications.setNotificationChannelAsync('default', {
+        name: 'Notificación de tu tarea',
+        importance: Notifications.AndroidImportance.HIGH,
+        sound: 'notificacion.wav', // Provide ONLY the base filename
+    });
 }
 
 export function mandar(titulo : string, descripcion : string) {
@@ -26,7 +32,8 @@ export function mandar(titulo : string, descripcion : string) {
         trigger: {
             type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL, 
             seconds: 300, 
-            repeats: false
+            repeats: false, 
+            channelId: 'default'
         }
     });
     console.log(info);
