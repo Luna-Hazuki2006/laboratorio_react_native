@@ -38,6 +38,14 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/sounds/campanitas.png",
+          "color": "#cd5c5c",
+          "sounds": ["./assets/sounds/notificacion.wav"]
+        }
       ]
     ],
     "experiments": {

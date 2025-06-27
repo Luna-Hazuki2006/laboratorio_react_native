@@ -7,13 +7,13 @@ export async function aceptar_notificaciones() {
     console.log(datos);
     
     Notifications.setNotificationHandler({
-    handleNotification: async () => ({
-        shouldShowBanner: true,
-        shouldShowList: true,
-        shouldPlaySound: true,
-        shouldSetBadge: false,
-    }),
-});
+        handleNotification: async () => ({
+            shouldShowBanner: true,
+            shouldShowList: true,
+            shouldPlaySound: true,
+            shouldSetBadge: false,
+        }),
+    });
 }
 
 export function mandar(titulo : string, descripcion : string) {
@@ -21,10 +21,11 @@ export function mandar(titulo : string, descripcion : string) {
         content: {
             title: titulo,
             body: `Recuerda: ${descripcion}`,
+            sound: 'notificacion.wav'
         },
         trigger: {
             type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL, 
-            seconds: 10, 
+            seconds: 300, 
             repeats: false
         }
     });
