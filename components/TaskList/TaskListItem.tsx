@@ -15,14 +15,13 @@ const TaskListItemComponent: React.FC<TaskListItemProps> = ({ taskList, onPress,
     return (
         <View style={styles.task}>
             <View style={styles.descriptionContainer}>
-                {/* <Pressable
-                onPress={onPress} */}
                 <TouchableOpacity onPress={onPress}>
-                {/* > */}
-                <Text numberOfLines={1} style={styles.description}>
-                    {taskList.name}
-                </Text>
-                {/* </Pressable> */}
+                    <Text numberOfLines={1} style={styles.description}>
+                        {taskList.name}
+                    </Text>
+                    <Text numberOfLines={1} style={styles.descriptionDate}>
+                        {taskList.createdAt.toLocaleString()}
+                    </Text>
                 </TouchableOpacity>
             </View>
             <Pressable onPress={onDelete} style={styles.deleteButton}>
@@ -37,7 +36,7 @@ export default React.memo(TaskListItemComponent);
 
 const styles = StyleSheet.create({
     task: {
-        height: 50,
+        height: 60,
         alignSelf: 'stretch',
         flexDirection: 'row',
         marginVertical: 8,
@@ -50,20 +49,15 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     description: {
-        paddingHorizontal: 10,
+        paddingTop:10,
+        paddingHorizontal: 15,
         color: colors.black,
-        fontSize: 17,
+        fontSize: 20,
     },
-    status: {
-        width: 50,
-        height: '100%',
-        justifyContent: 'center',
-        borderTopLeftRadius: 5,
-        borderBottomLeftRadius: 5,
-        backgroundColor: colors.gray,
-    },
-    completed: {
-        backgroundColor: colors.purple,
+    descriptionDate: {
+        color: colors.gray,
+        fontSize: 13,
+        textAlign: 'right',
     },
     deleteButton: {
         justifyContent: 'center',
@@ -72,12 +66,6 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
         color: colors.gray,
         fontSize: 17,
-    },
-    icon: {
-        color: colors.white,
-        textAlign: 'center',
-        fontSize: 17,
-        fontWeight: 'bold',
     },
 });
 
