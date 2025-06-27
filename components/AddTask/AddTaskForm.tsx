@@ -1,30 +1,39 @@
 import { mandar } from "@/hooks/sending";
 import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
-import { router } from "expo-router";
 import { useState } from "react";
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 type AddTaskFormProps = {
-    onSubmit: (title : string, description : string, dateTime : Date) => void;
+  onSubmit: (title: string, description: string, dateTime: Date) => void;
+  defaultTitle?: string;
+  defaultDescription?: string;
+  defaultDate?: Date;
+  mode: 'add' | 'edit';
 };
 
-const AddTaskForm: React.FC<AddTaskFormProps> = ({onSubmit}) => {
-    const [titulo, setTitulo] = useState('')
-    const [descripcion, setDescripcion] = useState('')
-    const [date, setDate] = useState<Date>(new Date());
-    const [mode, setMode] = useState<'date' | 'countdown' | 'datetime' | 'time'>('date');
+const AddTaskForm: React.FC<AddTaskFormProps> = ({
+  onSubmit,
+  defaultTitle = '',
+  defaultDescription = '',
+  defaultDate = new Date(),
+  mode
+}) => {
+    const [titulo, setTitulo] = useState(defaultTitle);
+    const [descripcion, setDescripcion] = useState(defaultDescription);
+    const [date, setDate] = useState<Date>(defaultDate);
+    const [modeD, setModeD] = useState<'date' | 'countdown' | 'datetime' | 'time'>('date');
     const [show, setShow] = useState(false);
     const handleSubmit = () => {
         onSubmit(titulo, descripcion, date);
         mandar(titulo, descripcion)
         setTitulo('');
         setDescripcion('')
-        if (date > (new Date())) {
-            router.push({
-                pathname: '/taskLists'
-            })
-        }
+        // if (date > (new Date())) {
+        //     router.push({
+        //         pathname: '/taskLists'
+        //     })
+        // }
         setDate(new Date())
     };
 
@@ -36,7 +45,7 @@ const AddTaskForm: React.FC<AddTaskFormProps> = ({onSubmit}) => {
     
     const showMode = (currentMode : 'date' | 'countdown' | 'datetime' | 'time') => {
         setShow(true);
-        setMode(currentMode);
+        setModeD(currentMode);
     };
     
     const showDatepicker = () => {
@@ -48,7 +57,8 @@ const AddTaskForm: React.FC<AddTaskFormProps> = ({onSubmit}) => {
     };
 
     return (
-        <SafeAreaView style={estilos.fondo}>
+        <SafeAreaView className="flex-1 p-4 bg-gray-100">
+            <Text className="text-xl font-bold text-center mb-4">{mode === 'edit' ? 'Modify Task' : 'Add new task'}</Text>
             <Text>Título: </Text>
             <TextInput 
                 value={titulo} 
@@ -56,7 +66,7 @@ const AddTaskForm: React.FC<AddTaskFormProps> = ({onSubmit}) => {
                 onChangeText={setTitulo}
                 autoCapitalize="none"
                 autoCorrect={true}
-                style={estilos.textInput}
+                className="bg-white rounded-md px-3 py-2 mt-2 mb-4 text-base"
             />
             <Text>Descripción: </Text>
             <TextInput 
@@ -65,73 +75,38 @@ const AddTaskForm: React.FC<AddTaskFormProps> = ({onSubmit}) => {
                 onChangeText={setDescripcion}
                 autoCapitalize="none"
                 autoCorrect={true}
-                style={estilos.textInput}
+                className="bg-white rounded-md px-3 py-2 mt-2 mb-4 text-base"
             />
             {/* <Text>Fecha de vencimiento: </Text> */}
             {/* <Button onPress={showDatepicker} title="Show date picker!" />
             <Button onPress={showTimepicker} title="Show time picker!" /> */}
-            <View style={estilos.division}>
-                <TouchableOpacity style={estilos.tiempo} onPress={showDatepicker}>
-                    <Text>📅</Text>
+            <View className="flex flex-row justify-start space-x-4 mb-4">
+                <TouchableOpacity className="bg-red-400 px-3 py-2 rounded-lg" onPress={showDatepicker}>
+                    <Text className="text-white text-xl">📅</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={estilos.tiempo} onPress={showTimepicker}>
-                    <Text>⌚</Text>
+                <TouchableOpacity className="bg-red-400 px-3 py-2 rounded-lg" onPress={showTimepicker}>
+                    <Text className="text-white text-xl">⌚</Text>
                 </TouchableOpacity>
             </View>
-            <Text>Fecha de vencimiento: </Text>
-            <Text style={estilos.textInput}>{date.toLocaleString()}</Text>
+            <Text className="text-base font-semibold">Fecha de vencimiento: </Text>
+            <Text className="bg-white rounded-md px-3 py-2 mt-2 mb-4 text-base">{date.toLocaleString()}</Text>
             {show && (
                 <DateTimePicker
                 testID="dateTimePicker"
                 value={date}
-                mode={mode}
+                mode={modeD}
                 is24Hour={true}
                 onChange={onChange}
                 />
             )}
             <View>
-                <TouchableOpacity style={estilos.boton} onPress={handleSubmit}>
-                    <Text>Añadir</Text>
+                <TouchableOpacity className="bg-red-500 px-5 py-3 rounded-lg self-center mt-4" onPress={handleSubmit}>
+                    <Text className="text-white font-bold text-lg">{mode === 'edit' ? 'Modify' : 'Add'}</Text>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>
     )
 }
 
-const estilos = StyleSheet.create({
-    fondo: {
-        flex: 1, 
-        padding: 10
-    },
-    tiempo: {
-        backgroundColor: 'indianred', 
-        padding: 5, 
-        margin: 5,
-        borderRadius: 10
-    }, 
-    division: {
-        display: 'flex', 
-        flexDirection: 'row'
-    }, 
-    textInput: {
-        borderRadius: 5, 
-        backgroundColor: 'white', 
-        paddingLeft: 10, 
-        // margin: 10, 
-        marginBottom: 10, 
-        marginTop: 10, 
-        fontSize: 16
-    }, 
-    boton: {
-        backgroundColor: 'indianred',
-        flexDirection: 'row', 
-        alignContent: 'center',
-        textAlign: 'center', 
-        alignSelf: 'center', 
-        margin: 5,
-        padding: 5,
-        borderRadius: 10
-    }
-});
 
 export default AddTaskForm

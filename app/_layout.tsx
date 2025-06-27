@@ -2,6 +2,7 @@ import { RealmProvider } from '@realm/react';
 import { Stack } from 'expo-router';
 import { SafeAreaView, StyleSheet } from 'react-native';
 
+import '../global.css';
 import schemas from '../models';
 import colors from '../styles/colors';
 
@@ -19,9 +20,10 @@ export default function RootLayout() {
               fontWeight: 'bold',
             },
           }}>
-          <Stack.Screen name="index" />
-          <Stack.Screen name="taskLists/index" />
-          <Stack.Screen name="taskList/[id]" />
+          <Stack.Screen name="index" options={{ title: 'My Lists' }}/>
+          <Stack.Screen name="taskLists/index" options={{ title: 'My Lists' }} />
+          <Stack.Screen name="taskList/[id]" options={{ title: 'My Tasks' }}  />
+          <Stack.Screen name="taskList/[id]/add" />
         </Stack>
       </RealmProvider>
     </SafeAreaView>

@@ -1,26 +1,28 @@
 import AddTaskManager from '@/components/AddTask/AddTaskManager';
-import Task from '@/models/Task';
-import { useQuery } from '@realm/react';
-import { useLocalSearchParams } from 'expo-router';
+import { Stack, useLocalSearchParams } from 'expo-router';
 import React from 'react';
-import { BSON } from 'realm';
 
-export default function TasksView() {
-    const [showDone, setShowDone] = React.useState(false);
-    const { id } = useLocalSearchParams();
-    const idObjectId = new BSON.ObjectId(id as string);
+export default function AddTaskView() {
+
+    const { id, taskId, name, description, expiresAt, mode } = useLocalSearchParams();
 
     // No toco esto porque me da miedo
-    const tasks = useQuery(
-        Task,
-        collection =>
-            showDone
-                ? collection.sorted('createdAt').filtered('taskListId == $0', idObjectId)
-                : collection.filtered('isComplete == false').sorted('createdAt').filtered('taskListId == $0', idObjectId),
-        [idObjectId, showDone]
-    );
+
+    // lo dejaré for the jajas
 
     return (
-        <AddTaskManager tasks={tasks} setShowDone={setShowDone} showDone={showDone} />
+      <>
+        <Stack.Screen options={{ title: mode === 'edit' ? 'Modify task' : 'Add Task'}} />
+        <AddTaskManager
+        mode={mode as 'edit' | 'add'}
+        initialValues={{
+          id: id as string,
+          taskId: taskId as string,
+          name: name as string | undefined,
+          description: description as string | undefined,
+          expiresAt: expiresAt ? new Date(expiresAt as string) : undefined,
+        }}
+      />
+    </>
     );
 }
