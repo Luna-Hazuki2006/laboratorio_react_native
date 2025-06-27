@@ -2,12 +2,12 @@ import React, { useCallback, useMemo } from 'react';
 import { StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
 import { BSON } from 'realm';
 
-import AddTaskForm from '../../components/Task/AddTaskForm';
 import TaskList from '../../components/Task/TaskList';
 import Task from '../../models/Task';
 
 import { useRealm } from '@realm/react';
 import { router, useLocalSearchParams } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import shadows from '../../styles/shadows';
 
 export default function TaskManager({
@@ -64,30 +64,44 @@ export default function TaskManager({
   );
 
   return (
-    <>
+    <SafeAreaView style={{flex: 1}}>
       <View style={styles.content}>
-        <AddTaskForm onSubmit={handleAddTask} />
+        {/* <AddTaskForm onSubmit={handleAddTask} /> */}
         {tasks.length === 0 ? (
-          <Text>No hay ninguna task y tal</Text>
+          <Text>Hmmm... Parece que no tienes ningún quehacer que hacer 😉</Text>
         ) : (
           <TaskList tasks={tasks} onToggleTaskStatus={handleToggleTaskStatus} onDeleteTask={handleDeleteTask} />
         )}
+      </View>
+      <View>
+        <View>
+          <TouchableOpacity 
+            onPress={() => {router.push({
+              pathname: '/taskList/[id]/add',
+              params: { id },
+            });}}>
+              <Text style={styles.boton}>➕</Text>
+          </TouchableOpacity>
+        </View>
       </View>
       <View style={styles.switchPanel}>
         <Text style={styles.switchPanelText}>Show Completed?</Text>
         <Switch value={showDone} onValueChange={() => setShowDone(!showDone)} />
       </View> 
-      <View>
-        <TouchableOpacity onPress={() => {router.push({
-            pathname: '/taskList/[id]/add',
-            params: { id },
-        });}}><Text>➕</Text></TouchableOpacity>
-      </View>
-    </>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  boton: {
+    padding: 5,
+    margin: 10,
+    borderRadius: 10,
+    backgroundColor: 'indianred',
+    textAlign: 'center',
+    width: '15%', 
+    alignSelf: 'flex-end', 
+  },
   content: {
     flex: 1,
     paddingTop: 20,

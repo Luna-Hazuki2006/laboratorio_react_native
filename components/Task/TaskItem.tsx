@@ -1,3 +1,4 @@
+import { Checkbox } from "expo-checkbox";
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
@@ -14,11 +15,14 @@ type TaskItemProps = {
 const TaskItemComponent: React.FC<TaskItemProps> = ({ task, onToggleStatus, onDelete }) => {
   return (
     <View style={styles.task}>
-      <Pressable
+      <Checkbox 
+        style={[styles.status, task.isComplete && styles.completed]} 
+        value={task.isComplete} onValueChange={onToggleStatus}/>
+      {/* <Pressable
         onPress={onToggleStatus}
         style={[styles.status, task.isComplete && styles.completed]}>
         <Text style={styles.icon}>{task.isComplete ? '✓' : '○'}</Text>
-      </Pressable>
+      </Pressable> */}
       <View style={styles.descriptionContainer}>
         <Text numberOfLines={1} style={styles.description}>
           {task.description}

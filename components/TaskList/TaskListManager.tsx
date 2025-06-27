@@ -8,6 +8,7 @@ import TaskListList from '../../components/TaskList/TaskListList';
 import TaskList from '../../models/TaskList';
 
 import { useRealm } from '@realm/react';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import shadows from '../../styles/shadows';
 
 export default function TaskListManager({
@@ -56,7 +57,7 @@ export default function TaskListManager({
 );
 
     return (
-        <>
+        <SafeAreaView style={{flex: 1}}>
             <View style={styles.content}>
                 <AddTaskListForm onSubmit={handleAddTask} />
                 {taskLists.length === 0 ? (
@@ -65,7 +66,7 @@ export default function TaskListManager({
                     <TaskListList taskLists={taskLists} onDeleteTaskList={handleDeleteTaskList} onPressTaskList={ handlePressTaskList } />
                 )}
             </View>
-        </>
+        </SafeAreaView>
     );
 };
 
