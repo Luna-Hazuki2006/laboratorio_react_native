@@ -9,12 +9,11 @@ type TaskListProps = {
   tasks: Realm.Results<Task & Realm.Object>;
   onToggleTaskStatus: (task: Task & Realm.Object) => void;
   onDeleteTask: (task: Task & Realm.Object) => void;
+  onEditTask: (task: Task & Realm.Object) => void;
 };
 
-const TaskList: React.FC<TaskListProps> = (
-  { tasks, onToggleTaskStatus, onDeleteTask }) => {
-  console.log(tasks);
-  
+const TaskList: React.FC<TaskListProps> = ({ tasks, onToggleTaskStatus, onDeleteTask, onEditTask }) => {
+
   return (
     <View style={styles.listContainer}>
       <FlatList
@@ -25,7 +24,8 @@ const TaskList: React.FC<TaskListProps> = (
             task={item}
             onToggleStatus={() => onToggleTaskStatus(item)}
             onDelete={() => onDeleteTask(item)}
-          />
+            onEdit={() => onEditTask(item)}
+            />
         )}
       />
     </View>

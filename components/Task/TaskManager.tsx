@@ -1,6 +1,5 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback } from 'react';
 import { StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
-import { BSON } from 'realm';
 
 import TaskList from '../../components/Task/TaskList';
 import Task from '../../models/Task';
@@ -22,27 +21,45 @@ export default function TaskManager({
   const realm = useRealm();
   
   const { id } = useLocalSearchParams<{ id: string }>();
-  const taskListId = useMemo(() => new BSON.ObjectId(id as string), [id]);
 
-  const handleAddTask = useCallback(
-    (description: string): void => {
-      if (!description) return;
+  //const taskListId = useMemo(() => new BSON.ObjectId(id as string), [id]);
+  // ya never again
+  // const handleAddTask = useCallback(
+  //   (description: string): void => {
+  //     if (!description) return;
 
-      realm.write(() => {
-        return realm.create(Task, {
-          _id: new BSON.ObjectId(),
-          taskListId: taskListId,
-          name: 'Sin nombre',
-          description,
-          isComplete: false,
-          expiresAt: new Date(),
-          createdAt: new Date(),
-          completedAt: new Date(),
-        });
-      });
-    },
-    [realm, taskListId]
-  );
+  //     realm.write(() => {
+  //       return realm.create(Task, {
+  //         _id: new BSON.ObjectId(),
+  //         taskListId: taskListId,
+  //         name: 'Sin nombre',
+  //         description,
+  //         isComplete: false,
+  //         expiresAt: new Date(),
+  //         createdAt: new Date(),
+  //         completedAt: new Date(),
+  //       });
+  //     });
+  //   },
+  //   [realm, taskListId]
+  // );
+
+const handleEditTask = useCallback(
+  (task: Task & Realm.Object) => {
+    router.push({
+      pathname: '/taskList/[id]/add',
+      params: {
+        id: task.taskListId.toHexString(),
+        taskId: task._id.toHexString(),
+        mode: 'edit',
+        name: task.name,
+        description: task.description,
+        expiresAt: task.expiresAt.toISOString(),
+      },
+    });
+  },
+  []
+);
 
   const handleToggleTaskStatus = useCallback(
     (task: Task & Realm.Object): void => {
@@ -68,9 +85,9 @@ export default function TaskManager({
       <View style={styles.content}>
         {/* <AddTaskForm onSubmit={handleAddTask} /> */}
         {tasks.length === 0 ? (
-          <Text>Hmmm... Parece que no tienes ningún quehacer que hacer 😉</Text>
+          <Text>Hmmm... It seems que no tienes ningún quehacer que hacer 😉</Text>
         ) : (
-          <TaskList tasks={tasks} onToggleTaskStatus={handleToggleTaskStatus} onDeleteTask={handleDeleteTask} />
+          <TaskList tasks={tasks} onToggleTaskStatus={handleToggleTaskStatus} onDeleteTask={handleDeleteTask} onEditTask={handleEditTask} />
         )}
       </View>
       <View>
@@ -85,7 +102,7 @@ export default function TaskManager({
         </View>
       </View>
       <View style={styles.switchPanel}>
-        <Text style={styles.switchPanelText}>Show Completed?</Text>
+        <Text style={styles.switchPanelText}>Show tasks completed</Text>
         <Switch value={showDone} onValueChange={() => setShowDone(!showDone)} />
       </View> 
     </SafeAreaView>

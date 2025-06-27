@@ -9,10 +9,12 @@ import shadows from '../../styles/shadows';
 type TaskItemProps = {
   task: Task;
   onToggleStatus: () => void;
+  onEdit: (task: Task & Realm.Object) => void;
   onDelete: () => void;
 };
 
-const TaskItemComponent: React.FC<TaskItemProps> = ({ task, onToggleStatus, onDelete }) => {
+const TaskItemComponent: React.FC<TaskItemProps> = ({ task, onToggleStatus, onEdit, onDelete }) => {
+
   return (
     <View style={styles.task}>
       <Checkbox 
@@ -24,9 +26,14 @@ const TaskItemComponent: React.FC<TaskItemProps> = ({ task, onToggleStatus, onDe
         <Text style={styles.icon}>{task.isComplete ? '✓' : '○'}</Text>
       </Pressable> */}
       <View style={styles.descriptionContainer}>
-        <Text numberOfLines={1} style={styles.description}>
-          {task.description}
-        </Text>
+        <Pressable onPress={() => onEdit(task as Task & Realm.Object)}>
+          <Text numberOfLines={1} style={styles.description}>
+            {task.name}
+          </Text>
+          <Text numberOfLines={1} style={styles.descriptionDate}>
+            Until: {task.expiresAt.toLocaleString()}
+          </Text>
+        </Pressable>
       </View>
       <Pressable onPress={onDelete} style={styles.deleteButton}>
         <Text style={styles.deleteText}>Delete</Text>
@@ -40,7 +47,7 @@ export default React.memo(TaskItemComponent);
 
 const styles = StyleSheet.create({
   task: {
-    height: 50,
+    height: 60,
     alignSelf: 'stretch',
     flexDirection: 'row',
     marginVertical: 8,
@@ -53,10 +60,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   description: {
-    paddingHorizontal: 10,
-    color: colors.black,
-    fontSize: 17,
+        paddingTop:10,
+        paddingHorizontal: 15,
+        color: colors.black,
+        fontSize: 20,
   },
+  descriptionDate: {
+        color: colors.gray,
+        fontSize: 13,
+        textAlign: 'right',
+    },
   status: {
     width: 50,
     height: '100%',

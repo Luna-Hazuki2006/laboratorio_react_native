@@ -5,17 +5,21 @@ import AddTaskForm from '@/components/AddTask/AddTaskForm';
 import Task from '../../models/Task';
 
 import { useRealm } from '@realm/react';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 
-export default function TaskManager({
-    tasks,
-    setShowDone,
-    showDone,
-}: {
-    tasks: Realm.Results<Task & Realm.Object>;
-    setShowDone: (showDone: boolean) => void;
-    showDone: boolean;
-}) {
+
+type AddTaskManagerProps = {
+  mode: 'add' | 'edit';
+  initialValues: {
+    id: string;
+    taskId?: string;
+    name?: string;
+    description?: string;
+    expiresAt?: Date;
+  };
+};
+
+export default function TaskManager({ mode, initialValues }: AddTaskManagerProps) {
     const realm = useRealm();
     
     const { id } = useLocalSearchParams<{ id: string }>();
@@ -38,22 +42,38 @@ export default function TaskManager({
             }
 
             realm.write(() => {
-                return realm.create(Task, {
-                    _id: new BSON.ObjectId(),
-                    taskListId: taskListId,
-                    name: title,
-                    description,
-                    isComplete: false,
-                    expiresAt: dateTime,
-                    createdAt: new Date(),
-                    completedAt: new Date(),
-                });
+                if (mode === 'edit' && initialValues.taskId) {
+                 const task = realm.objectForPrimaryKey(Task, new BSON.ObjectId(initialValues.taskId));
+                    if (task) {
+                        task.name = title;
+                        task.description = description;
+                        task.expiresAt = dateTime;
+                    }
+                } else {
+                    realm.create(Task, {
+                        _id: new BSON.ObjectId(),
+                        taskListId: taskListId,
+                        name: title,
+                        description,
+                        isComplete: false,
+                        expiresAt: dateTime,
+                        createdAt: new Date(),
+                        completedAt: new Date(),
+                    });
+                }
             });
+            router.push({ pathname: '/taskList/[id]', params: { id: initialValues.id } });
         },
-        [realm, taskListId]
+        [realm, taskListId, initialValues.taskId, initialValues.id, mode]
     );
 
     return (
-        <AddTaskForm onSubmit={handleAddTask}></AddTaskForm>
+        <AddTaskForm
+            onSubmit={handleAddTask}
+            defaultTitle={initialValues.name}
+            defaultDescription={initialValues.description}
+            defaultDate={initialValues.expiresAt}
+            mode={mode}
+        />
     );
 };
