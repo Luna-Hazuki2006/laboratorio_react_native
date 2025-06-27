@@ -26,14 +26,25 @@ const TaskItemComponent: React.FC<TaskItemProps> = ({ task, onToggleStatus, onEd
         <Text style={styles.icon}>{task.isComplete ? '✓' : '○'}</Text>
       </Pressable> */}
       <View style={styles.descriptionContainer}>
-        <TouchableOpacity onPress={() => onEdit(task as Task & Realm.Object)}>
-          <Text numberOfLines={1} style={styles.description}>
-            {task.name}
-          </Text>
-          <Text className="text-left mb-3 ml-2" numberOfLines={1} style={styles.descriptionDate}>
-            Until: {task.expiresAt.toLocaleString()}
-          </Text>
-        </TouchableOpacity>
+        {!task.isComplete ? (
+          <TouchableOpacity onPress={() => onEdit(task as Task & Realm.Object)}>
+            <Text numberOfLines={1} style={styles.description}>
+              {task.name}
+            </Text>
+            <Text className="text-left mb-3 ml-2" numberOfLines={1} style={styles.descriptionDate}>
+              Until: {task.expiresAt.toLocaleString()}
+            </Text>
+          </TouchableOpacity>
+        ) : (
+          <View>
+            <Text numberOfLines={1} style={styles.description}>
+              {task.name}
+            </Text>
+            <Text className="text-left mb-3 ml-2" numberOfLines={1} style={styles.descriptionDate}>
+              Until: {task.expiresAt.toLocaleString()}
+            </Text>
+          </View>
+        )}
       </View>
       <Pressable onPress={onDelete} style={styles.deleteButton}>
         <Text style={styles.deleteText}>Delete</Text>
